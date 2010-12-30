@@ -1,0 +1,42 @@
+#!/usr/bin/make -f
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp install-stamp
+	# Add here commands to clean up after the build process.
+	dh_clean
+
+install: install-stamp
+install-stamp: build-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	touch install-stamp
+
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_install
+	#dh_installdocs
+	#dh_installchangelogs
+	#dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol 
+	#dh_md5sums
+	dh_builddeb
+
+binary-arch:
+
+binary: binary-indep
+.PHONY: build clean binary-arch binary-indep binary install

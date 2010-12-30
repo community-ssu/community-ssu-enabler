@@ -1,0 +1,85 @@
+community-ssu-enabler (0.4-5) fremantle; urgency=low
+
+  * Add hildon-application-manager-config update to postinst.
+  * Use red-pill mode to ignore domain problems.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Wed, 29 Dec 2010 21:00:52 +0200
+
+community-ssu-enabler (0.4-4) fremantle; urgency=low
+
+  * - is an illegal DBus character...(?)
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Thu, 16 Dec 2010 16:40:48 +0200
+
+community-ssu-enabler (0.4-3) fremantle; urgency=low
+
+  * Forgot desktop file.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Thu, 16 Dec 2010 16:22:26 +0200
+
+community-ssu-enabler (0.4-2) fremantle; urgency=low
+
+  * We need a desktop icon to launch using DBus.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Thu, 16 Dec 2010 15:54:00 +0200
+
+community-ssu-enabler (0.4-1) fremantle; urgency=low
+
+  * Testing dbus method of launching terminal
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Thu, 16 Dec 2010 13:53:40 +0200
+
+community-ssu-enabler (0.4) fremantle; urgency=low
+
+  * Added license agreement, ready for release.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Mon,  01 Nov 2010 16:43:39 +0200
+
+community-ssu-enabler (0.3-3) fremantle; urgency=low
+
+  * sigh...
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Sat,  30 Oct 2010 16:15:45 +0200
+
+community-ssu-enabler (0.3-2) fremantle; urgency=low
+
+  * postinst still does not work as intended
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Fri,  29 Oct 2010 14:05:20 +0200
+
+community-ssu-enabler (0.3-1) fremantle; urgency=low
+
+  * postinst does not get called properly.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Fri,  29 Oct 2010 13:19:17 +0200
+
+community-ssu-enabler (0.3) fremantle; urgency=low
+
+  * Postinst calls an external terminal window to handle processes that need dpkg and apt.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Fri,  29 Oct 2010 00:57:29 +0200
+
+community-ssu-enabler (0.2-2) fremantle; urgency=low
+
+  * Package now removes original metapackage (I think?)
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Tue,  26 Oct 2010 19:43:29 +0200
+
+community-ssu-enabler (0.2-1) fremantle; urgency=low
+
+  * Package now removes original metapackage.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Tue,  26 Oct 2010 18:56:35 +0200
+
+community-ssu-enabler (0.2) fremantle; urgency=low
+
+  * Changing scripts to use maemo.org.
+  * Fixed hildon-application-manager configuration.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Tue,  26 Oct 2010 17:12:07 +0200
+
+community-ssu-enabler (0.1) fremantle-1.2.1; urgency=low
+
+  * Initial release for Fremantle, huge thanks to Lucas Maneos.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Mon,  27 Sep 2010 22:08:40 +0200

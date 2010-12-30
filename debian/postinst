@@ -1,0 +1,99 @@
+#!/bin/sh
+
+set -e
+
+LICENSE=/tmp/.communityssu
+HAMCFG=hildon-application-manager-config
+HAMFILE=/home/user/.osso/hildon-application-manager
+
+echo "Maemo 5 Community SSU release notes.
+
+You are about to install a repository provided by the community,
+this repository holds packages with patches added by the community at maemo.org
+
+While these packages have been tested, installation is solely at your own risk.
+A backup is suggested.
+
+After installation, a terminal window will be launched, you are required to close the Application Manager to continue. If the window does not open automatically, please use the icon in the menu." > $LICENSE
+
+echo "Please accept the license agreement displayed on your N900's screen."
+maemo-confirm-text "Maemo 5 Community SSU Agreement" $LICENSE
+rm -f $LICENSE
+
+cat <<EOF | $HAMCFG -v add -
+<config>
+ <settings>
+  <domain>
+   <name>community-updates</name>
+   <trust-level>650</trust-level>
+   <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
+   <certified/>
+  </domain>
+ </settings>
+</config>
+EOF
+
+$HAMCFG update
+
+# This file is not present post PR1.1.1, but just to be sure
+# Temporary (hopefully...) hack to release the SSU.'
+# Thanks Jaffa.
+
+if [ -f $HAMFILE ]
+	then
+		mv $HAMFILE $HAMFILE.bak
+fi
+
+echo "red-pill-ignore-wrong-domains true" > $HAMFILE
+chown user:users $HAMFILE
+
+# Nokia repository signing key 1v1
+apt-key add - <<HERE
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: SKS 1.1.0
+
+mQGiBEzG2tIRBACC3/uryYwXSnzAHkaQOrVdN2P9qroZy1nHFkJAPO0b7TqPNsFxVhSwCF/3
+XCVmmVBv3dL9uAimEgavUwIq0x3tLGn6OvpQ3BB/rIbZnkAaN6858jC4Ob/fA6SSoQPZ0GYn
+pzD5MK3K4v44H+e+FpzTaGQmM4b/atkA/7xn4h0+OwCgslilNq/ZdbEPQz7MrleDiY2s2pUD
++wTeD3dYAdG/Z9i/OwgbEKimB4IFslXW/ye4MJPJKjst1nvyNiKT6KVOf+zpNdDgtV/aUJiw
+MssObOkJZSar1OiNlrTZGBu7jwUD+fAG4YFI0c47ilMlwjn6Qq316nX1O7LvUk3S/cvqUlz4
+6KY4E0/Cv96K7+FQVt1H0uA5pA51A/429Xf6Ei79a0PvGOUYHdiOsSN8WHHiSFSX5HeWNJ//
+DQ2DaT2LDoabqV6/mGoztKg8HnPL2nG20GaKLn2MgzJezvQA0Uf1lRzt8Vq7iOPSAf+Tn7fL
+nA8TBxj/Nns+VlDWQGzBeCB/R5HPB1KkkzMWLxG0bZUBVkjP2oQzW6/AdbRFbWFlbW8ub3Jn
+IGNvbW11bml0eSByZXBvc2l0b3JpZXMgKGZyZW1hbnRsZSkgPHJlcG9zaXRvcmllc0BtYWVt
+by5vcmc+iGYEExECACYFAkzG2tICGwMFCQWjmoAGCwkIBwMCBBUCCAMEFgIDAQIeAQIXgAAK
+CRBdDnxPLm1vmnv8AJ92EJJzQiJGOwdU1LB5auvYRNB0ggCfdzbYi+Lbh+kdn5TuYn+AhTiv
+aS+5Ag0ETMba0hAIAKh+qKZUjfXKDMYQI34kIgFFm+uJvAuidZmmK5FSRRN+NebyzE2SDYQm
+iNHGxdor8ccmEm2ezpN0FDJgn7ajAUqlujmhnkrYi6YtZf7n2FKmRH5Wd2l/hOJe1DEudg5h
+TvO6v5NzU2ws8WyfQ/BGTneaVy79DvTEl7XU+CvbU5E/99oezMh97r+vbvNrf72h8mSbRmij
+Ce6rOtRjJI9ypEp7ZaJbuSWLECTue7D7MjFilCOMA/qJy5oFYnlr/kNW2Php5uwvxvpRmBjr
+UKz+HW8iAftGGdlh14FbpkASbOpuepUVcc7L+r7djSd0qyYX1u+0LiPLSOoEiLCjX2zKtU8A
+AwUH/0H/NiegSPO4r3tEKLcdAcIF5cz4UEPK9eo2IUpQJP9umVIqBkYSexbrhnv6JwCYI7+N
+sikPpB//sSzTc06peXI3ttvRFw4QG2w+lOEbTb/jr0k2oKb8UE2rEz6VYBtbuzxIVvbmK744
+9JWV144dIz/okywB4G+G+nfSrP2pNGeNNJNRkoSjRqrhddKT1NyuAcPp9Eqnq7tqf5xu8eKA
+fR7L/TvB/l4fQw8LGBjmAwyAkEbPI7dCm54TaWD0Yb9b09bBKunFlrzWiwiXNqdHlR0r79K7
+FZO4QdCf/93VrYXdpFHyyc9o+fz0xgtu4K/tT7u94wxdz0MgmRCKGhGwNaCITwQYEQIADwUC
+TMba0gIbDAUJBaOagAAKCRBdDnxPLm1vmsHXAJ9PLlyomLFQcsOmeVKnNslzR7QYFgCaAygA
+U6UhOKlHJK/Nt6b5ZH6PIi8=
+=Gd85
+-----END PGP PUBLIC KEY BLOCK-----
+HERE
+
+update-sudoers
+
+# Install community SSU.
+# Call an external terminal and separate it from postinst.
+#echo "Calling external terminal window..."
+# Calling it directly with apt doesn't work, works with dpkg, idk what's wrong, so calling external command externally.
+#run-standalone.sh nohup osso-xterm "sudo install-community-ssu" &
+# Even this doesn't work, let's try dbus ~ 16 December 2010
+ # /usr/bin/install-community-ssu.launch
+ # sleep 1
+ # exit 0
+# We need an icon in the menu for this to work.
+# Assume it needs 5 seconds to reload the menu, race condition.
+sleep 5
+run-standalone.sh dbus-send --type=method_call --dest=com.nokia.HildonDesktop.AppMgr /com/nokia/HildonDesktop/AppMgr com.nokia.HildonDesktop.AppMgr.LaunchApplication string:"community-ssu"
+
+exit 0
+

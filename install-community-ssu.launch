@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Calling external terminal window..."
+osso-xterm "sudo install-community-ssu"

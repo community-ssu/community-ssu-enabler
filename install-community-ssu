@@ -1,0 +1,56 @@
+#!/bin/sh
+
+metapackage="`basename /var/lib/dpkg/info/mp-fremantle-*.list .list`"
+communitymp="mp-fremantle-community-pr"
+desktopdir=/usr/share/applications/hildon
+desktopfile=$desktopdir/community-ssu-enabler.desktop
+
+if ps ax | grep -v grep | grep apt-worker > /dev/null
+	then
+		echo -e "Hildon Application Manager running, please exit it and press enter\c"
+		read keypress
+		killall apt-worker 2> /dev/null
+		killall hildon-application-manager 2> /dev/null
+		dpkg --configure -a
+fi
+
+if [ -f /var/lib/apt/lock ]
+	then
+		echo "apt status area locked, please exit all other apt instances then press enter (warning: apt will be killed)."
+		read keypress
+		killall apt-get 2> /dev/null
+		rm /var/lib/apt/lock 2> /dev/null
+		dpkg --configure -a
+fi
+
+if ps ax | grep -v grep | grep dpkg > /dev/null
+	then
+		echo "dpkg status area locked, please exit all other dpkg instances then press enter (warning: dpkg will be killed)."
+		read keypress
+		killall dpkg 2> /dev/null
+		rm /var/lib/dpkg/lock 2> /dev/null
+		dpkg --configure -a
+fi
+
+if [ ! "$metapackage" = "mp-fremantle-community-pr" ]
+	then
+		echo -e "Uninstalling Nokia package $metapackage..."
+		dpkg -r $metapackage
+fi
+
+echo -e "\nInstalling community package $communitymp..."
+apt-get -y --force-yes install $communitymp
+
+if [ "$?" = "0" ]
+	then
+		echo "Community SSU successfully enabled and latest updates installed."
+		if [ -f $desktopfile ];
+			then
+				rm -f $desktopfile
+		fi
+	else
+		echo "Community SSU enabled, but package was not installed. Errors have occured."
+fi
+
+echo "Press any key to exit..."
+read keypress

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.1
+Type=Application
+Name=Community SSU Enabler
+Exec=/usr/bin/install-community-ssu.launch
+X-Osso-Service=org.maemo.communityssu
+

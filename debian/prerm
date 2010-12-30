@@ -1,0 +1,17 @@
+#! /bin/sh
+
+set -e
+
+cat <<EOF | hildon-application-manager-config -v delete -
+<config>
+ <settings>
+  <domain>
+   <name>community-updates</name>
+  </domain>
+ </settings>
+</config>
+EOF
+
+hildon-application-manager-config update
+
+apt-key del 2E6D6F9A || true
