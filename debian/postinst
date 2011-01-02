@@ -4,7 +4,6 @@ set -e
 
 LICENSE=/tmp/.communityssu
 HAMCFG=hildon-application-manager-config
-HAMFILE=/home/user/.osso/hildon-application-manager
 
 echo "Maemo 5 Community SSU release notes.
 
@@ -35,17 +34,11 @@ EOF
 
 $HAMCFG update
 
-# This file is not present post PR1.1.1, but just to be sure
-# Temporary (hopefully...) hack to release the SSU.'
-# Thanks Jaffa.
-
-if [ -f $HAMFILE ]
-	then
-		mv $HAMFILE $HAMFILE.bak
-fi
-
-echo "red-pill-ignore-wrong-domains true" > $HAMFILE
-chown user:users $HAMFILE
+# Put a shim around apt-worker so that the 'ignore packages
+# from wrong domains' flag is always turned off (defaults to
+# on).
+dpkg-divert --add --rename --divert /usr/libexec/apt-worker.real /usr/libexec/apt-worker
+ln -s /usr/libexec/apt-worker-cssu.sh /usr/libxec/apt-worker
 
 # Nokia repository signing key 1v1
 apt-key add - <<HERE

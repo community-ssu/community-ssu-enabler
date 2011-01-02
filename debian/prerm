@@ -14,4 +14,7 @@ EOF
 
 hildon-application-manager-config update
 
+rm /usr/libexec/apt-worker
+dpkg-divert --rename --remove /usr/libexec/apt-worker
+
 apt-key del 2E6D6F9A || true
