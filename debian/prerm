@@ -1,5 +1,6 @@
 #! /bin/sh
 
+APTWORKER=/usr/libexec/apt-worker
 set -e
 
 cat <<EOF | hildon-application-manager-config -v delete -
@@ -14,7 +15,7 @@ EOF
 
 hildon-application-manager-config update
 
-rm /usr/libexec/apt-worker
-dpkg-divert --rename --remove /usr/libexec/apt-worker
+[ -L "${APTWORKER}" ] && rm "${APTWORKER}"
+dpkg-divert --rename --remove "${APTWORKER}"
 
 apt-key del 2E6D6F9A || true

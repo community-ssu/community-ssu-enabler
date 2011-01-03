@@ -4,6 +4,8 @@ set -e
 
 LICENSE=/tmp/.communityssu
 HAMCFG=hildon-application-manager-config
+APTWORKER=/usr/libexec/apt-worker
+APTWORKER_SHIM=${APTWORKER}-cssu.sh
 
 echo "Maemo 5 Community SSU release notes.
 
@@ -37,8 +39,8 @@ $HAMCFG update
 # Put a shim around apt-worker so that the 'ignore packages
 # from wrong domains' flag is always turned off (defaults to
 # on).
-dpkg-divert --add --rename --divert /usr/libexec/apt-worker.real /usr/libexec/apt-worker
-ln -s /usr/libexec/apt-worker-cssu.sh /usr/libxec/apt-worker
+dpkg-divert --add --rename --divert "${APTWORKER}.real" "${APTWORKER}"
+[ -L "${APTWORKER_SHIM}" ] || ln -s "${APTWORKER_SHIM}" "${APTWORKER}"
 
 # Nokia repository signing key 1v1
 apt-key add - <<HERE
