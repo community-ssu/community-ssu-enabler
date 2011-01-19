@@ -4,5 +4,5 @@ Version=0.1
 Type=Application
 Name=Community SSU Enabler
 Terminal=true
-Exec=sudo install-community-ssu
+Exec=osso-xterm "sudo install-community-ssu"
 
