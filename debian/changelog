@@ -1,3 +1,9 @@
+community-ssu-enabler (0.4-9) fremantle; urgency=low
+
+  * Use dumb meta package and HAM to upgrade.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Wed, 19 Jan 2011 22:15:48 +0200
+
 community-ssu-enabler (0.4-8) fremantle; urgency=low
 
   * Version bump to get rid of size mismatch.

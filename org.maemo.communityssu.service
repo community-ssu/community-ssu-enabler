@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.maemo.communityssu
-Exec=/usr/bin/install-community-ssu.launch

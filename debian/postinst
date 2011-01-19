@@ -13,9 +13,8 @@ You are about to install a repository provided by the community,
 this repository holds packages with patches added by the community at maemo.org
 
 While these packages have been tested, installation is solely at your own risk.
-A backup is suggested.
 
-After installation, a terminal window will be launched, you are required to close the Application Manager to continue. If the window does not open automatically, please use the icon in the menu." > $LICENSE
+After installation, launch the enabler from the menu and follow the onscreen instructions." > $LICENSE
 
 echo "Please accept the license agreement displayed on your N900's screen."
 maemo-confirm-text "Maemo 5 Community SSU Agreement" $LICENSE
@@ -76,19 +75,4 @@ HERE
 
 update-sudoers
 
-# Install community SSU.
-# Call an external terminal and separate it from postinst.
-#echo "Calling external terminal window..."
-# Calling it directly with apt doesn't work, works with dpkg, idk what's wrong, so calling external command externally.
-#run-standalone.sh nohup osso-xterm "sudo install-community-ssu" &
-# Even this doesn't work, let's try dbus ~ 16 December 2010
- # /usr/bin/install-community-ssu.launch
- # sleep 1
- # exit 0
-# We need an icon in the menu for this to work.
-# Assume it needs 5 seconds to reload the menu, race condition.
-sleep 5
-run-standalone.sh dbus-send --type=method_call --dest=com.nokia.HildonDesktop.AppMgr /com/nokia/HildonDesktop/AppMgr com.nokia.HildonDesktop.AppMgr.LaunchApplication string:"community-ssu"
-
 exit 0
-

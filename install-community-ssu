@@ -4,6 +4,9 @@ metapackage="`basename /var/lib/dpkg/info/mp-fremantle-*.list .list`"
 communitymp="mp-fremantle-community-pr"
 desktopdir=/usr/share/applications/hildon
 desktopfile=$desktopdir/community-ssu-enabler.desktop
+ssutmpdir=/opt/ssu
+debfilename=mp-fremantle-community-pr_0_all.deb
+debfile=$ssutmpdir/$debfilename
 
 if ps ax | grep -v grep | grep apt-worker > /dev/null
 	then
@@ -38,19 +41,26 @@ if [ ! "$metapackage" = "mp-fremantle-community-pr" ]
 		dpkg -r $metapackage
 fi
 
-echo -e "\nInstalling community package $communitymp..."
-apt-get -y --force-yes install $communitymp
+echo -e "\nInstalling community package $communitymp dumb meta package..."
+dpkg -i --force-all $debfile
+
+echo -e "\nUpdating repository lists..."
+apt-get update
 
 if [ "$?" = "0" ]
 	then
-		echo "Community SSU successfully enabled and latest updates installed."
+		echo "Community SSU successfully enabled. Launching Application Manager..."
+		run-standalone.sh dbus-send --print-reply --type=method_call --dest=com.nokia.hildon_application_manager /com/nokia/hildon_application_manager com.nokia.hildon_application_manager.show_check_for_updates_view
 		if [ -f $desktopfile ];
 			then
 				rm -f $desktopfile
 		fi
+		if [ -f $debfile ];
+			then rm -rf $ssutmpdir
+		fi
+		exit 0
 	else
 		echo "Community SSU enabled, but package was not installed. Errors have occured."
+		echo "Press any key to exit..."
+		read keypress
 fi
-
-echo "Press any key to exit..."
-read keypress

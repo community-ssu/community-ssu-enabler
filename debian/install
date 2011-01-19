@@ -1,6 +1,5 @@
-community-ssu.sudoers		etc/sudoers.d
-install-community-ssu		usr/sbin
-install-community-ssu.launch	usr/bin
-org.maemo.communityssu.service	usr/share/dbus-1/services
-community-ssu-enabler.desktop	usr/share/applications/hildon
-apt-worker-cssu.sh		usr/libexec
+community-ssu.sudoers			etc/sudoers.d
+install-community-ssu			usr/sbin
+community-ssu-enabler.desktop		usr/share/applications/hildon
+apt-worker-cssu.sh			usr/libexec
+mp-fremantle-community-pr_0_all.deb	opt/ssu
