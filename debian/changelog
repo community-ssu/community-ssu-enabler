@@ -1,3 +1,9 @@
+community-ssu-enabler (0.6) fremantle; urgency=low
+
+  * Added HAM icon to package.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Mon, 31 Jan 2011 14:26:05 +0200
+
 community-ssu-enabler (0.5) fremantle; urgency=low
 
   * Hildon-desktop's launcher ignores Terminal=true in .desktop file.
