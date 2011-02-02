@@ -8,6 +8,29 @@ ssutmpdir=/opt/ssu
 debfilename=mp-fremantle-community-pr_0_all.deb
 debfile=$ssutmpdir/$debfilename
 
+cleanup()
+{
+	if [ -f $desktopfile ];
+		then
+			rm -f $desktopfile
+	fi
+	if [ -f $debfile ];
+		then
+			rm -rf $ssutmpdir
+	fi
+}
+
+if [ -f /var/lib/dpkg/info/$communitymp ]
+then
+
+cleanup
+echo "Community SSU already enabled"
+echo "Press any key to exit..."
+read keypress
+exit 0
+
+else
+
 if ps ax | grep -v grep | grep apt-worker > /dev/null
 	then
 		echo -e "Hildon Application Manager running, please exit it and press enter\c"
@@ -51,16 +74,12 @@ if [ "$?" = "0" ]
 	then
 		echo "Community SSU successfully enabled. Launching Application Manager..."
 		run-standalone.sh dbus-send --print-reply --type=method_call --dest=com.nokia.hildon_application_manager /com/nokia/hildon_application_manager com.nokia.hildon_application_manager.show_check_for_updates_view
-		if [ -f $desktopfile ];
-			then
-				rm -f $desktopfile
-		fi
-		if [ -f $debfile ];
-			then rm -rf $ssutmpdir
-		fi
+		cleanup
 		exit 0
 	else
 		echo "Community SSU enabled, but package was not installed. Errors have occured."
 		echo "Press any key to exit..."
 		read keypress
+fi
+
 fi
