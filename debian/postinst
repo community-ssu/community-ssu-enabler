@@ -3,6 +3,8 @@
 set -e
 
 LICENSE=/tmp/.communityssu
+DESKTOPDIR=/usr/share/applications/hildon
+DESKTOPFILE=$DESKTOPDIR/community-ssu-enabler.desktop
 HAMCFG=hildon-application-manager-config
 APTWORKER=/usr/libexec/apt-worker
 APTWORKER_SHIM=${APTWORKER}-cssu.sh
@@ -74,5 +76,10 @@ U6UhOKlHJK/Nt6b5ZH6PIi8=
 HERE
 
 update-sudoers
+
+if [ -f /var/lib/dpkg/info/mp-fremantle-community-pr.list ]
+	then
+		rm -f $DESKTOPFILE
+fi
 
 exit 0

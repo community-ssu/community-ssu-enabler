@@ -20,7 +20,7 @@ cleanup()
 	fi
 }
 
-if [ -f /var/lib/dpkg/info/$communitymp ]
+if [ -f /var/lib/dpkg/info/$communitymp.list ]
 then
 
 cleanup
