@@ -2,7 +2,7 @@ Source: community-ssu-enabler
 Section: user/system
 Priority: optional
 Maintainer: Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>
-Build-Depends: debhelper
+Build-Depends: debhelper, sharutils
 
 Package: community-ssu-enabler
 Architecture: all
