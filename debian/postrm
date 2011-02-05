@@ -1,17 +1,4 @@
 #!/bin/sh
 
-HAMFILE=/home/user/.osso/hildon-application-manager
-
-if [ -f $HAMFILE.bak ]
-	then
-		mv $HAMFILE.bak $HAMFILE
-		chown user:users $HAMFILE
-	else
-		if [ -f $HAMFILE ]
-			then
-				rm -f $HAMFILE
-		fi
-fi
-
 update-sudoers
 exit 0
