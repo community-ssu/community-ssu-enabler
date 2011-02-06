@@ -64,6 +64,22 @@ if [ ! "$metapackage" = "mp-fremantle-community-pr" ]
 		dpkg -r $metapackage
 fi
 
+if [ -f /etc/apt/preferences ]
+	then
+		echo "\nSome packages are pinned in /etc/apt/preferences, this might prevent the upgrade, remove file? (Y/n)"
+		read answer
+		if [ "$answer" = "y" ] || [ "$answer" = "Y" ]
+			then
+				echo "Removing /etc/apt/preferences"
+				rm /etc/apt/preferences
+		elif [ "$answer" = "n" ] || [ "$answer" = "N" ]
+			then echo "File not removed, installation might fail."
+		else 
+			echo "Removing /etc/apt/preferences"
+			rm /etc/apt/preferences
+		fi
+fi
+
 echo -e "\nInstalling community package $communitymp dumb meta package..."
 dpkg -i --force-all $debfile
 
