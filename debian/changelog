@@ -1,3 +1,9 @@
+community-ssu-enabler (0.6-5) fremantle; urgency=low
+
+  * Fixed icon in HAM.
+
+ -- Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>  Sun,  6 Feb 2011 14:25:44 +0200
+
 community-ssu-enabler (0.6) fremantle; urgency=low
 
   * Added HAM icon to package.
