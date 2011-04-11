@@ -60,6 +60,11 @@ fi
 
 if [ ! "$metapackage" = "mp-fremantle-community-pr" ]
 	then
+    echo "Pinning Nokia package $metapackage dependencies..."
+    metapackage_deps=$(apt-cache show $metapackage | grep Depends: | head -n 1 | perl -pe 's/Depends:\s+//; s/( \(.*?\))?, / /g;')
+    echo "Marking [$metapackage_deps] as manually installed..."
+    apt-get install $metapackage_deps
+
 		echo -e "Uninstalling Nokia package $metapackage..."
 		dpkg -r $metapackage
 fi
