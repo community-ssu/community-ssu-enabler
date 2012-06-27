@@ -2,11 +2,11 @@ Source: community-ssu-enabler
 Section: user/system
 Priority: optional
 Maintainer: Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>
-Build-Depends: debhelper, sharutils
+Build-Depends: debhelper
 
 Package: community-ssu-enabler
 Architecture: all
-Depends: hildon-application-manager, osso-gnupg | gnupg, apt
+Depends: hildon-application-manager, osso-gnupg | gnupg, apt, sudo, osso-xterm
 Description: Configures the Maemo 5 Community SSU repo.
 XSBC-Maemo-Display-Name: Community SSU enabler
 XSBC-Maemo-Upgrade-Description: Install this to receive community software updates.

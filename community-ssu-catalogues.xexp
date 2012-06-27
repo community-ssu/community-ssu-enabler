@@ -1,0 +1,46 @@
+<config>
+  <catalogue>
+    <id>community</id>
+    <name>
+     <default>Community SSU</default>
+    </name>
+    <uri>http://repository.maemo.org/community/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <enabled/>
+    <sort-weight>80</sort-weight>
+  </catalogue>
+  <catalogue>
+    <id>community-testing</id>
+    <name>
+     <default>Community SSU (testing)</default>
+    </name>
+    <uri>http://repository.maemo.org/community-testing/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <disabled/>
+    <sort-weight>79</sort-weight>
+  </catalogue>
+  <catalogue>
+    <id>community-devel</id>
+    <name>
+     <default>Community SSU (devel)</default>
+    </name>
+    <uri>http://maemo.merlin1991.at/cssu/community-devel/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <disabled/>
+    <sort-weight>78</sort-weight>
+  </catalogue>
+  <catalogue>
+    <id>community-thumb</id>
+    <name>
+     <default>Community SSU (thumb)</default>
+    </name>
+    <uri>http://maemo.merlin1991.at/cssu/community-thumb/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <disabled/>
+    <sort-weight>77</sort-weight>
+  </catalogue>
+</config>

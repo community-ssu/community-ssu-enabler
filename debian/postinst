@@ -2,84 +2,132 @@
 
 set -e
 
-LICENSE=/tmp/.communityssu
-DESKTOPDIR=/usr/share/applications/hildon
-DESKTOPFILE=$DESKTOPDIR/community-ssu-enabler.desktop
-HAMCFG=hildon-application-manager-config
-APTWORKER=/usr/libexec/apt-worker
-APTWORKER_SHIM=${APTWORKER}-cssu.sh
+if [ "$1" != "configure" ]; then exit 0; fi
 
-echo "Maemo 5 Community SSU release notes.
+if [ -f /var/lib/dpkg/info/mp-fremantle-community-pr.list ]; then
+	rm -f /usr/share/applications/hildon/community-ssu-enabler.desktop
+	rm -rf /opt/ssu
+fi
 
-You are about to install a repository provided by the community,
-this repository holds packages with patches added by the community at maemo.org
-
-While these packages have been tested, installation is solely at your own risk.
-
-After installation, launch the enabler from the menu and follow the onscreen instructions." > $LICENSE
-
-echo "Please accept the license agreement displayed on your N900's screen."
-maemo-confirm-text "Maemo 5 Community SSU Agreement" $LICENSE
-rm -f $LICENSE
-
-cat <<EOF | $HAMCFG -v add -
+# Replace user config Community SSU catalogues by system wide
+if grep -q '<name>Community SSU</name>' /etc/hildon-application-manager/catalogues; then
+hildon-application-manager-config -v delete - << EOF
 <config>
- <settings>
-  <domain>
-   <name>community-updates</name>
-   <trust-level>650</trust-level>
-   <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
-   <certified/>
-  </domain>
- </settings>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community</id>
+ </catalogue>
+ <catalogue>
+  <name>Community SSU</name>
+  <uri>http://repository.maemo.org/community/</uri>
+  <dist>fremantle</dist>
+  <components>free non-free</components>
+ </catalogue>
 </config>
 EOF
+hildon-application-manager-config -v add - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community</id>
+  <enabled/>
+ </catalogue>
+</config>
+EOF
+fi
 
-$HAMCFG update
+if grep -q '<name>Community SSU (testing)</name>' /etc/hildon-application-manager/catalogues; then
+hildon-application-manager-config -v delete - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-testing</id>
+ </catalogue>
+ <catalogue>
+  <name>Community SSU (testing)</name>
+  <uri>http://repository.maemo.org/community-testing/</uri>
+  <dist>fremantle</dist>
+  <components>free non-free</components>
+ </catalogue>
+</config>
+EOF
+hildon-application-manager-config -v add - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-testing</id>
+  <enabled/>
+ </catalogue>
+</config>
+EOF
+fi
 
-# Put a shim around apt-worker so that the 'ignore packages
-# from wrong domains' flag is always turned off (defaults to
-# on).
-dpkg-divert --add --rename --divert "${APTWORKER}.real" "${APTWORKER}"
-[ -L "${APTWORKER_SHIM}" ] || ln -s "${APTWORKER_SHIM}" "${APTWORKER}"
+if grep -q '<name>Community SSU (devel)</name>' /etc/hildon-application-manager/catalogues; then
+hildon-application-manager-config -v delete - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-devel</id>
+ </catalogue>
+ <catalogue>
+  <name>Community SSU (devel)</name>
+  <uri>http://maemo.merlin1991.at/cssu/community-devel/</uri>
+  <dist>fremantle</dist>
+  <components>free non-free</components>
+ </catalogue>
+</config>
+EOF
+hildon-application-manager-config -v add - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-devel</id>
+  <enabled/>
+ </catalogue>
+</config>
+EOF
+fi
 
-# Nokia repository signing key 1v1
-apt-key add - <<HERE
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: SKS 1.1.0
+if grep -q '<name>Community SSU (thumb)</name>' /etc/hildon-application-manager/catalogues; then
+hildon-application-manager-config -v delete - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-thumb</id>
+ </catalogue>
+ <catalogue>
+  <name>Community SSU (thumb)</name>
+  <uri>http://maemo.merlin1991.at/cssu/community-thumb/</uri>
+  <dist>fremantle</dist>
+  <components>free non-free</components>
+ </catalogue>
+</config>
+EOF
+hildon-application-manager-config -v add - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-thumb</id>
+  <enabled/>
+ </catalogue>
+</config>
+EOF
+fi
 
-mQGiBEzG2tIRBACC3/uryYwXSnzAHkaQOrVdN2P9qroZy1nHFkJAPO0b7TqPNsFxVhSwCF/3
-XCVmmVBv3dL9uAimEgavUwIq0x3tLGn6OvpQ3BB/rIbZnkAaN6858jC4Ob/fA6SSoQPZ0GYn
-pzD5MK3K4v44H+e+FpzTaGQmM4b/atkA/7xn4h0+OwCgslilNq/ZdbEPQz7MrleDiY2s2pUD
-+wTeD3dYAdG/Z9i/OwgbEKimB4IFslXW/ye4MJPJKjst1nvyNiKT6KVOf+zpNdDgtV/aUJiw
-MssObOkJZSar1OiNlrTZGBu7jwUD+fAG4YFI0c47ilMlwjn6Qq316nX1O7LvUk3S/cvqUlz4
-6KY4E0/Cv96K7+FQVt1H0uA5pA51A/429Xf6Ei79a0PvGOUYHdiOsSN8WHHiSFSX5HeWNJ//
-DQ2DaT2LDoabqV6/mGoztKg8HnPL2nG20GaKLn2MgzJezvQA0Uf1lRzt8Vq7iOPSAf+Tn7fL
-nA8TBxj/Nns+VlDWQGzBeCB/R5HPB1KkkzMWLxG0bZUBVkjP2oQzW6/AdbRFbWFlbW8ub3Jn
-IGNvbW11bml0eSByZXBvc2l0b3JpZXMgKGZyZW1hbnRsZSkgPHJlcG9zaXRvcmllc0BtYWVt
-by5vcmc+iGYEExECACYFAkzG2tICGwMFCQWjmoAGCwkIBwMCBBUCCAMEFgIDAQIeAQIXgAAK
-CRBdDnxPLm1vmnv8AJ92EJJzQiJGOwdU1LB5auvYRNB0ggCfdzbYi+Lbh+kdn5TuYn+AhTiv
-aS+5Ag0ETMba0hAIAKh+qKZUjfXKDMYQI34kIgFFm+uJvAuidZmmK5FSRRN+NebyzE2SDYQm
-iNHGxdor8ccmEm2ezpN0FDJgn7ajAUqlujmhnkrYi6YtZf7n2FKmRH5Wd2l/hOJe1DEudg5h
-TvO6v5NzU2ws8WyfQ/BGTneaVy79DvTEl7XU+CvbU5E/99oezMh97r+vbvNrf72h8mSbRmij
-Ce6rOtRjJI9ypEp7ZaJbuSWLECTue7D7MjFilCOMA/qJy5oFYnlr/kNW2Php5uwvxvpRmBjr
-UKz+HW8iAftGGdlh14FbpkASbOpuepUVcc7L+r7djSd0qyYX1u+0LiPLSOoEiLCjX2zKtU8A
-AwUH/0H/NiegSPO4r3tEKLcdAcIF5cz4UEPK9eo2IUpQJP9umVIqBkYSexbrhnv6JwCYI7+N
-sikPpB//sSzTc06peXI3ttvRFw4QG2w+lOEbTb/jr0k2oKb8UE2rEz6VYBtbuzxIVvbmK744
-9JWV144dIz/okywB4G+G+nfSrP2pNGeNNJNRkoSjRqrhddKT1NyuAcPp9Eqnq7tqf5xu8eKA
-fR7L/TvB/l4fQw8LGBjmAwyAkEbPI7dCm54TaWD0Yb9b09bBKunFlrzWiwiXNqdHlR0r79K7
-FZO4QdCf/93VrYXdpFHyyc9o+fz0xgtu4K/tT7u94wxdz0MgmRCKGhGwNaCITwQYEQIADwUC
-TMba0gIbDAUJBaOagAAKCRBdDnxPLm1vmsHXAJ9PLlyomLFQcsOmeVKnNslzR7QYFgCaAygA
-U6UhOKlHJK/Nt6b5ZH6PIi8=
-=Gd85
------END PGP PUBLIC KEY BLOCK-----
-HERE
+for file in /usr/share/hildon-application-manager/keys/*.gpg; do
+	apt-key add $file
+done
 
+hildon-application-manager-config update
 update-sudoers
 
-if [ -f /var/lib/dpkg/info/mp-fremantle-community-pr.list ]
-	then
-		rm -f $DESKTOPFILE
+# Remove old diversion of apt-worker
+APTWORKER=/usr/libexec/apt-worker
+if [ -L "${APTWORKER}" ]; then
+	rm -f "${APTWORKER}"
+fi
+if dpkg-divert --list | grep "${APTWORKER}"; then
+	dpkg-divert --rename --remove "${APTWORKER}"
 fi
 
 exit 0

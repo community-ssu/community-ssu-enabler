@@ -1,4 +1,36 @@
 #!/bin/sh
 
+if [ "$1" != "remove" ] && [ "$1" != "purge" ]; then exit 0; fi
+
+hildon-application-manager-config -v delete - << EOF
+<config>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community</id>
+ </catalogue>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-testing</id>
+ </catalogue>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-devel</id>
+ </catalogue>
+ <catalogue>
+  <file>community-ssu-catalogues</file>
+  <id>community-thumb</id>
+ </catalogue>
+</config>
+EOF
+
+KEYS="2E6D6F9A" # TODO: Add merlin key
+for key in $KEYS; do
+	if apt-key export $key 2>/dev/null | grep -q PGP; then
+		apt-key del $key
+	fi
+done
+
+hildon-application-manager-config update
 update-sudoers
+
 exit 0

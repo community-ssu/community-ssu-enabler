@@ -1,3 +1,19 @@
+community-ssu-enabler (0.7) fremantle; urgency=low
+
+  * Remove non needed Makefile and duplicate icon file
+  * Remove now non needed apt-worker-cssu.sh wrapper script
+  * Add system wide Community SSU catalogues, domains and (gpg) keys files
+  * Rename script install-community-ssu to community-ssu-enabler
+  * Rename file community-ssu.sudoers to community-ssu-enabler.sudoers
+  * Update files in debian/
+  * Move license argument to debian preinst script
+  * debian/postinst: Remove old (duplicate) user configured Community SSU catalogues
+  * Update .gitignore
+  * This package now install Stable, Testing, Devel and Thumb repositories
+  * Enabled will be only that repositories which was enabled manually or via install file
+
+ -- Pali Rohár <pali.rohar@gmail.com>  Wed, 27 Jun 2012 20:57:30 +0200
+
 community-ssu-enabler (0.6-6) fremantle; urgency=low
 
   * Bumped version number, corrupted installation package.

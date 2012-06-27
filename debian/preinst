@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" != "install" ]; then exit 0; fi
+
+LICENSE=/tmp/.communityssu
+cat > $LICENSE << EOF
+Maemo 5 Community SSU release notes.
+
+You are about to install a repository provided by the community,
+this repository holds packages with patches added by the community at maemo.org
+
+While these packages have been tested, installation is solely at your own risk.
+
+After installation, launch the enabler from the menu and follow the onscreen instructions.
+EOF
+echo "Please accept the license agreement displayed on your N900's screen."
+maemo-confirm-text "Maemo 5 Community SSU Agreement" $LICENSE
+res=$?
+rm -f $LICENSE
+exit $res
