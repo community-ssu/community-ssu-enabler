@@ -1,7 +1,8 @@
-community-ssu-enabler.sudoers		etc/sudoers.d
 community-ssu-enabler.desktop		usr/share/applications/hildon
 community-ssu-enabler.png 		usr/share/icons/hicolor/scalable/hildon
 community-ssu-enabler			usr/sbin
+community-ssu-disabler			usr/sbin
+community-ssu.sudoers			etc/sudoers.d
 mp-fremantle-community-pr_0_all.deb	opt/ssu
 community-ssu-catalogues.xexp		usr/share/hildon-application-manager/catalogues
 community-ssu-domains.xexp		usr/share/hildon-application-manager/domains

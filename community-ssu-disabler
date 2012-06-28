@@ -1,0 +1,119 @@
+#!/bin/sh
+
+packages() {
+	awk '
+BEGIN		{ FS = ": " }
+/^Package:/	{ pkg = $2 }
+/^Version:/	{ version = $2 }
+/^$/		{ print(pkg, version) }
+' "$@"
+}
+
+CSSU_LISTS="/var/lib/apt/lists/repository.maemo.org_community_*_Packages /var/lib/apt/lists/repository.maemo.org_community-testing_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-devel_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-thumb_*_Packages"
+
+if test "$(id -u)" != "0"; then
+	echo "You must be root to run this script"
+	exit 1
+fi
+
+echo "Checking system packages. Please wait... (this can take a lot of time)"
+echo
+
+rm -f /var/tmp/cssu-packages
+touch /var/tmp/cssu-packages
+rm -f /var/tmp/cssu-lists
+touch /var/tmp/cssu-lists
+for file in $CSSU_LISTS; do
+	if ! test -f $file; then continue; fi
+	echo $file >> /var/tmp/cssu-lists
+	sed -n 's/Package: //p' $file >> /var/tmp/cssu-packages
+done
+sort -u /var/tmp/cssu-packages > /var/tmp/cssu-packages.new
+mv /var/tmp/cssu-packages.new /var/tmp/cssu-packages
+
+dpkg --get-selections | awk '/install$/{print $1}' | sort -u | comm -12 - /var/tmp/cssu-packages > /var/tmp/cssu-packages.new
+grep -v '^community-ssu-enabler$' /var/tmp/cssu-packages.new > /var/tmp/cssu-packages
+
+rm -f /var/tmp/version-packages
+touch /var/tmp/version-packages
+for file in /var/lib/apt/lists/*_Packages; do
+	if ! test -f $file; then continue; fi
+	if grep -q "^$file\$" /var/tmp/cssu-lists; then continue; fi
+	packages $file >> /var/tmp/version-packages
+done
+sort -u /var/tmp/version-packages > /var/tmp/version-packages.new
+mv /var/tmp/version-packages.new /var/tmp/version-packages
+
+rm -f /var/tmp/install-packages
+touch /var/tmp/install-packages
+rm -f /var/tmp/remove-packages
+touch /var/tmp/remove-packages
+while read package; do
+	max=0
+	for version in $(grep "^$package " /var/tmp/version-packages | sed 's/.* //'); do
+		if dpkg --compare-versions $max lt $version 1>/dev/null 2>&1; then
+			max=$version
+		fi
+	done
+	if test "$max" = "0"; then
+		echo "$package" >> /var/tmp/remove-packages
+	else
+		echo "$package=$max" >> /var/tmp/install-packages
+	fi
+done < /var/tmp/cssu-packages
+
+rm -f /var/tmp/cssu-packages /var/tmp/cssu-lists /var/tmp/version-packages
+
+meta=mp-fremantle-generic-pr
+for num in 002 003 004 203 204 205 206 207 208 210; do
+	if dpkg -l "*-$num" 2>/dev/null | grep -q '^ii'; then
+		meta=mp-fremantle-$num-pr
+		break
+	fi
+done
+
+echo "Remove packages:"
+cat /var/tmp/remove-packages
+echo
+
+echo "Install packages:"
+cat /var/tmp/install-packages
+echo
+
+echo "Remove metapackage:"
+if dpkg -l mp-fremantle-community-pr 2>/dev/null | grep -q '^ii'; then
+	echo "mp-fremantle-community-pr"
+fi
+echo
+
+echo "Install metapackage:"
+if ! dpkg -l $meta 2>/dev/null | grep -q '^ii'; then
+	echo $meta >> /var/tmp/install-packages
+	echo $meta
+fi
+echo
+
+if test "$1" == "--check"; then exit 0; fi
+
+echo "This script will uninstall Community SSU and downgrade Maemo 5 to last Nokia version."
+echo "See above changes, do you want to continue? (yes/no)"
+
+read REPLY
+
+if test "$REPLY" != "yes"; then
+	echo "Canceling..."
+	exit 0
+fi
+
+echo
+echo "==== Removing packages ===="
+dpkg -P --force-all $(cat /var/tmp/remove-packages)
+
+echo
+echo "==== Downgrading packages ===="
+sudo apt-get -y --force-yes install $(cat /var/tmp/install-packages)
+
+echo
+echo "Done."
+echo "Now you need to restart device."
+read REPLY

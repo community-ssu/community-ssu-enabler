@@ -1,0 +1,2 @@
+user ALL = NOPASSWD: /usr/sbin/community-ssu-enabler
+user ALL = NOPASSWD: /usr/sbin/community-ssu-disabler
