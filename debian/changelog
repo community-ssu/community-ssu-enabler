@@ -11,6 +11,7 @@ community-ssu-enabler (0.7) fremantle; urgency=low
   * Update .gitignore
   * This package now install Stable, Testing, Devel and Thumb repositories
   * Enabled will be only that repositories which was enabled manually or via install file
+  * Added script community-ssu-disabler
 
  -- Pali Rohár <pali.rohar@gmail.com>  Wed, 27 Jun 2012 20:57:30 +0200
 
