@@ -1,3 +1,9 @@
+community-ssu-enabler (0.7-1) fremantle; urgency=low
+
+  * Added gpg key for maemo.merlin1991.at cssu repositories
+
+ -- Pali Rohár <pali.rohar@gmail.com>  Thu, 19 Jul 2012 17:13:36 +0200
+
 community-ssu-enabler (0.7) fremantle; urgency=low
 
   * Remove non needed Makefile and duplicate icon file

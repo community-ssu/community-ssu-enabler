@@ -23,7 +23,7 @@ hildon-application-manager-config -v delete - << EOF
 </config>
 EOF
 
-KEYS="2E6D6F9A" # TODO: Add merlin key
+KEYS="2E6D6F9A 8239FA6E"
 for key in $KEYS; do
 	if apt-key export $key 2>/dev/null | grep -q PGP; then
 		apt-key del $key
