@@ -7,7 +7,7 @@
     <uri>http://repository.maemo.org/community/</uri>
     <dist>fremantle</dist>
     <components>free non-free</components>
-    <enabled/>
+    <disabled/>
     <sort-weight>80</sort-weight>
   </catalogue>
   <catalogue>

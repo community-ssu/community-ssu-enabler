@@ -3,6 +3,7 @@
    <name>community</name>
    <trust-level>700</trust-level>
    <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
+   <key>3BF3A043AE1A872CBCE84314144B83D58239FA6E</key>
    <default/>
    <certified/>
   </domain>
@@ -10,6 +11,7 @@
    <name>community-testing</name>
    <trust-level>701</trust-level>
    <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
+   <key>3BF3A043AE1A872CBCE84314144B83D58239FA6E</key>
    <default/>
    <certified/>
   </domain>
@@ -17,6 +19,7 @@
    <name>community-devel</name>
    <trust-level>702</trust-level>
    <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
+   <key>3BF3A043AE1A872CBCE84314144B83D58239FA6E</key>
    <default/>
    <certified/>
   </domain>
@@ -24,6 +27,7 @@
    <name>community-thumb</name>
    <trust-level>703</trust-level>
    <key>3EF6EE85773B629FB2516B795D0E7C4F2E6D6F9A</key>
+   <key>3BF3A043AE1A872CBCE84314144B83D58239FA6E</key>
    <default/>
    <certified/>
   </domain>

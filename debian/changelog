@@ -1,3 +1,10 @@
+community-ssu-enabler (0.7-2) fremantle; urgency=low
+
+  * Added merlin gpg key to domain file
+  * Disabled Community SSU catalogue by default
+
+ -- Pali Rohár <pali.rohar@gmail.com>  Thu, 19 Jul 2012 17:52:52 +0200
+
 community-ssu-enabler (0.7-1) fremantle; urgency=low
 
   * Added gpg key for maemo.merlin1991.at cssu repositories
