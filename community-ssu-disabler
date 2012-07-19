@@ -58,7 +58,9 @@ while read package; do
 	if test "$max" = "0"; then
 		echo "$package" >> /var/tmp/remove-packages
 	else
-		echo "$package=$max" >> /var/tmp/install-packages
+		if test $(dpkg-query -W -f \${Version} $package) != "$max"; then
+			echo "$package=$max" >> /var/tmp/install-packages
+		fi
 	fi
 done < /var/tmp/cssu-packages
 
@@ -111,7 +113,7 @@ dpkg -P --force-all $(cat /var/tmp/remove-packages)
 
 echo
 echo "==== Downgrading packages ===="
-sudo apt-get -y --force-yes install $(cat /var/tmp/install-packages)
+apt-get -y --force-yes install $(cat /var/tmp/install-packages)
 
 echo
 echo "Done."

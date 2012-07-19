@@ -11,10 +11,10 @@ community-ssu-disabler --check
 if test -s /var/tmp/remove-packages || test -s /var/tmp/install-packages; then
 	echo
 	echo "ERROR: Package community-ssu-enabler cannot be unstalled, because Community SSU is installed"
-	echo "First uninstall Community SSU via: sudo community-ssu-disabler"
+	echo "First uninstall Community SSU via: sudo /usr/sbin/community-ssu-disabler"
 	echo
 	$dbusmsg string:"ERROR: Package community-ssu-enabler cannot be unstalled, because Community SSU is installed"
-	$dbusmsg string:"First uninstall Community SSU via: sudo community-ssu-disabler"
+	$dbusmsg string:"First uninstall Community SSU via: sudo /usr/sbin/community-ssu-disabler"
 	exit 1
 fi
 
