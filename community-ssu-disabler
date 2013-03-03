@@ -123,6 +123,27 @@ if test "$REPLY" != "yes"; then
 	exit 0
 fi
 
+proxy_mode="$(gconftool -g /system/proxy/mode)"
+
+if test "$proxy_mode" = "manual"; then
+
+	use_http_proxy="$(gconftool -g /system/http_proxy/use_http_proxy)"
+	if test "$use_http_proxy" = "true"; then
+		host="$(gconftool -g /system/http_proxy/host)"
+		port="$(gconftool -g /system/http_proxy/port)"
+		if test -n "$host" -a -n "$port"; then
+			export http_proxy="http://$host:$port"
+		fi
+	fi
+
+	host="$(gconftool -g /system/proxy/secure_host)"
+	port="$(gconftool -g /system/proxy/secure_port)"
+	if test -n "$host" -a -n "$port"; then
+		export https_proxy="https://$host:$port"
+	fi
+
+fi
+
 echo
 echo "==== Removing packages ===="
 dpkg -P --force-all $(cat /var/tmp/remove-packages)

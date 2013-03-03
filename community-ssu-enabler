@@ -31,6 +31,27 @@ exit 0
 
 else
 
+proxy_mode="$(gconftool -g /system/proxy/mode)"
+
+if [ "$proxy_mode" = "manual" ]; then
+
+	use_http_proxy="$(gconftool -g /system/http_proxy/use_http_proxy)"
+	if [ "$use_http_proxy" = "true" ]; then
+		host="$(gconftool -g /system/http_proxy/host)"
+		port="$(gconftool -g /system/http_proxy/port)"
+		if [ -n "$host" ] && [ -n "$port" ]; then
+			export http_proxy="http://$host:$port"
+		fi
+	fi
+
+	host="$(gconftool -g /system/proxy/secure_host)"
+	port="$(gconftool -g /system/proxy/secure_port)"
+	if [ -n "$host" ] && [ -n "$port" ]; then
+		export https_proxy="https://$host:$port"
+	fi
+
+fi
+
 if ps ax | grep -v grep | grep apt-worker > /dev/null
 	then
 		echo -e "Hildon Application Manager running, please exit it and press enter\c"
