@@ -1,3 +1,20 @@
+community-ssu-enabler (0.8-1) fremantle; urgency=low
+
+  * Split community-ssu-enabler into more packages
+    Each repository now has its own community-ssu-enabler-* package with catalogue configuration
+    This will prevent to enable CSSU devel & thumb repositories via Application Manager
+    Enabling CSSU repositories are now possible only via install files (available at WIKI page)
+
+  * Automatically start script community-ssu-enabler from postinst when dpkg and apt-get finish and cssu metpackage is not installed
+    This will install Community SSU automatically, so users will not need to click on CSSU icon in menu
+
+  * Add support for Maemo proxy settings to community-ssu-enabler and community-ssu-disabler scripts
+    This fixing bug https://bugs.maemo.org/show_bug.cgi?id=11915
+
+  * Fix errors in community-ssu-disabler script
+
+ -- Pali Rohár <pali.rohar@gmail.com>  Fri, 14 Jun 2013 11:12:33 +0200
+
 community-ssu-enabler (0.7-4) fremantle; urgency=low
 
   * Updated cssu gpg key, would have expired 2013-10-25
