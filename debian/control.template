@@ -1,7 +1,7 @@
 Source: community-ssu-enabler
 Section: user/system
 Priority: optional
-Maintainer: Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>
+Maintainer: Pali Rohár <pali.rohar@gmail.com>
 Build-Depends: debhelper
 
 Package: community-ssu-enabler
