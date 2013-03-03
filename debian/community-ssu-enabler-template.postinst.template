@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+# Remove user catalogue config
+if grep -q '<name>@name@</name>' /etc/hildon-application-manager/catalogues; then
+hildon-application-manager-config -v delete - << EOF
+<config>
+ <catalogue>
+  <name>@name@</name>
+  <uri>@uri@</uri>
+  <dist>fremantle</dist>
+  <components>free non-free</components>
+ </catalogue>
+</config>
+EOF
+fi
+
+hildon-application-manager-config update
+
+exit 0

@@ -1,2 +1,8 @@
 debian/community-ssu-enabler/
+debian/community-ssu-enabler-*/
 debian/files
+debian/control
+debian/community-ssu-enabler-*.install
+debian/community-ssu-enabler-*.prerm
+debian/community-ssu-enabler-*.preinst
+debian/community-ssu-enabler-*.postinst

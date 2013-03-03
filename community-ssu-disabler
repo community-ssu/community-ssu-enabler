@@ -9,11 +9,27 @@ BEGIN		{ FS = ": " }
 ' "$@"
 }
 
-CSSU_LISTS="/var/lib/apt/lists/repository.maemo.org_community_*_Packages /var/lib/apt/lists/repository.maemo.org_community-testing_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-devel_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-thumb_*_Packages"
+CSSU_STABLE="/var/lib/apt/lists/repository.maemo.org_community_*_Packages"
+CSSU_TESTING="/var/lib/apt/lists/repository.maemo.org_community-testing_*_Packages"
+CSSU_DEVEL="/var/lib/apt/lists/maemo.merlin1991.at_cssu_community-devel_*_Packages"
+CSSU_THUMB="/var/lib/apt/lists/maemo.merlin1991.at_cssu_community-thumb_*_Packages"
+
+CSSU_LISTS="$CSSU_STABLE $CSSU_TESTING $CSSU_DEVEL $CSSU_THUMB"
 
 if test "$(id -u)" != "0"; then
 	echo "You must be root to run this script"
 	exit 1
+fi
+
+if test "$1" = "--check"; then
+	case "$2" in
+		stable) CSSU_LISTS="$CSSU_STABLE" ;;
+		testing) CSSU_LISTS="$CSSU_TESTING" ;;
+		devel) CSSU_LISTS="$CSSU_DEVEL" ;;
+		thumb) CSSU_LISTS="$CSSU_THUMB" ;;
+		"") ;;
+		*) echo "Unknown CSSU type $2"; exit 1 ;;
+	esac
 fi
 
 echo "Checking system packages. Please wait... (this can take a lot of time)"

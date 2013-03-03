@@ -1,0 +1,36 @@
+#!/bin/sh
+case "$1" in
+	stable|testing|devel|thumb)
+		sed "s/@template@/$1/g" debian/control.template > debian/control
+		sed "s/@template@/$1/g" debian/community-ssu-enabler-template.install.template > debian/community-ssu-enabler-$1.install
+		sed "s/@template@/$1/g" debian/community-ssu-enabler-template.prerm.template > debian/community-ssu-enabler-$1.prerm
+		sed "s/@template@/$1/g" debian/community-ssu-enabler-template.preinst.template > debian/community-ssu-enabler-$1.preinst
+		sed "s/@template@/$1/g" debian/community-ssu-enabler-template.postinst.template > debian/community-ssu-enabler-$1.postinst
+		if test "$1" = "stable"; then
+			sed "s/@name@/Community SSU/g" -i debian/community-ssu-enabler-$1.postinst
+		else
+			sed "s/@name@/Community SSU ($2)/g" -i debian/community-ssu-enabler-$1.postinst
+		fi
+		if test "$2" = "stable"; then
+			sed "s/@uri@/http:\/\/repository.maemo.org\/community\//g" -i debian/community-ssu-enabler-$1.postinst
+		elif test "$2" = "testing"; then
+			sed "s/@uri@/http:\/\/repository.maemo.org\/community-$2\//g" -i debian/community-ssu-enabler-$1.postinst
+		else
+			sed "s/@uri@/http:\/\/maemo.merlin1991.at\/cssu\/community-$2\//g" -i debian/community-ssu-enabler-$1.postinst
+		fi
+		exit 0
+		;;
+	clean)
+		rm -f debian/control
+		rm -f debian/community-ssu-enabler-*.install
+		rm -f debian/community-ssu-enabler-*.prerm
+		rm -f debian/community-ssu-enabler-*.preinst
+		rm -f debian/community-ssu-enabler-*.postinst
+		exit 0
+		;;
+	*)
+		echo "Unknown action: $1"
+		echo "Use: stable|testing|devel|thumb or clean"
+		exit 1
+		;;
+esac

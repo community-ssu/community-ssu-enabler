@@ -1,0 +1,12 @@
+<config>
+  <catalogue>
+    <id>community-devel</id>
+    <name>
+     <default>Community SSU (devel)</default>
+    </name>
+    <uri>http://maemo.merlin1991.at/cssu/community-devel/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <sort-weight>78</sort-weight>
+  </catalogue>
+</config>
