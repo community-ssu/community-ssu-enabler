@@ -24,9 +24,9 @@ touch /var/tmp/cssu-packages
 rm -f /var/tmp/cssu-lists
 touch /var/tmp/cssu-lists
 for file in $CSSU_LISTS; do
-	if ! test -f $file; then continue; fi
-	echo $file >> /var/tmp/cssu-lists
-	sed -n 's/Package: //p' $file >> /var/tmp/cssu-packages
+	if ! test -f "$file"; then continue; fi
+	echo "$file" >> /var/tmp/cssu-lists
+	sed -n 's/Package: //p' "$file" >> /var/tmp/cssu-packages
 done
 sort -u /var/tmp/cssu-packages > /var/tmp/cssu-packages.new
 mv /var/tmp/cssu-packages.new /var/tmp/cssu-packages
@@ -37,7 +37,7 @@ grep -v '^community-ssu-enabler$' /var/tmp/cssu-packages.new > /var/tmp/cssu-pac
 rm -f /var/tmp/version-packages
 touch /var/tmp/version-packages
 for file in /var/lib/apt/lists/*_Packages; do
-	if ! test -f $file; then continue; fi
+	if ! test -f "$file"; then continue; fi
 	if grep -q "^$file\$" /var/tmp/cssu-lists; then continue; fi
 	packages $file >> /var/tmp/version-packages
 done
@@ -51,14 +51,14 @@ touch /var/tmp/remove-packages
 while read package; do
 	max=0
 	for version in $(grep "^$package " /var/tmp/version-packages | sed 's/.* //'); do
-		if dpkg --compare-versions $max lt $version 1>/dev/null 2>&1; then
-			max=$version
+		if dpkg --compare-versions "$max" "<<" "$version" 1>/dev/null 2>&1; then
+			max="$version"
 		fi
 	done
 	if test "$max" = "0"; then
 		echo "$package" >> /var/tmp/remove-packages
 	else
-		if test $(dpkg-query -W -f \${Version} $package) != "$max"; then
+		if test "$(dpkg-query -W -f \${Version} $package)" != "$max"; then
 			echo "$package=$max" >> /var/tmp/install-packages
 		fi
 	fi
@@ -69,7 +69,7 @@ rm -f /var/tmp/cssu-packages /var/tmp/cssu-lists /var/tmp/version-packages
 meta=mp-fremantle-generic-pr
 for num in 002 003 004 203 204 205 206 207 208 210; do
 	if dpkg -l "*-$num" 2>/dev/null | grep -q '^ii'; then
-		meta=mp-fremantle-$num-pr
+		meta="mp-fremantle-$num-pr"
 		break
 	fi
 done
@@ -89,13 +89,13 @@ fi
 echo
 
 echo "Install metapackage:"
-if ! dpkg -l $meta 2>/dev/null | grep -q '^ii'; then
-	echo $meta >> /var/tmp/install-packages
-	echo $meta
+if ! dpkg -l "$meta" 2>/dev/null | grep -q '^ii'; then
+	echo "$meta" >> /var/tmp/install-packages
+	echo "$meta"
 fi
 echo
 
-if test "$1" == "--check"; then exit 0; fi
+if test "$1" = "--check"; then exit 0; fi
 
 echo "This script will uninstall Community SSU and downgrade Maemo 5 to last Nokia version."
 echo "See above changes, do you want to continue? (yes/no)"
