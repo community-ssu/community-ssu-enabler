@@ -2,6 +2,21 @@
 
 set -e
 
+# Wait until dpkg and apt-get finish (max 300s) and start CSSU enabler
+cssu_enabler() {
+	try=300
+	while test "$try" -gt "0"; then
+		if ! pgrep dpkg 1>/dev/null && ! pgrep apt-get 1>/dev/null; then
+			break
+		fi
+		sleep 1
+		try=$(($try-1))
+	fi
+	if ! test -f /var/lib/dpkg/info/mp-fremantle-community-pr.list
+		su user -c 'run-standalone.sh osso-xterm "sudo community-ssu-enabler"'
+	fi
+}
+
 # Remove user catalogue config
 if grep -q '<name>@name@</name>' /etc/hildon-application-manager/catalogues; then
 hildon-application-manager-config -v delete - << EOF
@@ -17,5 +32,9 @@ EOF
 fi
 
 hildon-application-manager-config update
+
+if ! test -f /var/lib/dpkg/info/mp-fremantle-community-pr.list; then
+	cssu_enabler &
+fi
 
 exit 0
