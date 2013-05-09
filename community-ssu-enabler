@@ -93,6 +93,8 @@ apt-get update
 
 if [ "$?" = "0" ]
 	then
+		echo "backing up transistions.ini"
+		mv /usr/share/hildon-desktop/transitions.ini /usr/share/hildon-desktop/transitions.ini.precssu
 		echo "Community SSU successfully enabled. Launching Application Manager..."
 		run-standalone.sh dbus-send --print-reply --type=method_call --dest=com.nokia.hildon_application_manager /com/nokia/hildon_application_manager com.nokia.hildon_application_manager.show_check_for_updates_view
 		cleanup

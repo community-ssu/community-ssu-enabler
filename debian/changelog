@@ -34,6 +34,12 @@ community-ssu-enabler (0.7) fremantle; urgency=low
 
  -- Pali Rohár <pali.rohar@gmail.com>  Wed, 27 Jun 2012 20:57:30 +0200
 
+community-ssu-enabler (0.6-7) fremantle; urgency=low
+
+  * Move transistions.ini to backup so new file has a chance to deploy
+
+ -- Christian Ratzenhofer <christian_ratzenhofer@yahoo.de>  Fri, 11 Nov 2011 01:45:50 +0100
+
 community-ssu-enabler (0.6-6) fremantle; urgency=low
 
   * Bumped version number, corrupted installation package.
