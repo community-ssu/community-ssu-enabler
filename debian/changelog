@@ -1,3 +1,9 @@
+community-ssu-enabler (0.7-4) fremantle; urgency=low
+
+  * Updated cssu gpg key, would have expired 2013-10-25
+
+ -- Christian Ratzenhofer <christian.ratzenhofer@cdnm.at>  Thu, 23 May 2013 20:26:47 +0200
+
 community-ssu-enabler (0.7-3) fremantle; urgency=low
 
   * Fixed false positives and removed sudo usage in uninstall script
