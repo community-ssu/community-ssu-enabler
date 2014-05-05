@@ -88,9 +88,6 @@ fi
 echo -e "\nInstalling community package $communitymp dumb meta package..."
 dpkg -i --force-all $debfile
 
-echo -e "\nUpdating repository lists..."
-apt-get update
-
 # Check if we have to install a kernel which workarounds errata 430973
 # Assume upstream kernels support it
 KERNEL_VERSION=`uname -r`
@@ -106,6 +103,9 @@ case $KERNEL_VERSION in
 	*)
 	;;
 esac
+
+echo -e "\nUpdating repository lists..."
+apt-get update
 
 if [ "$?" = "0" ]
 	then
