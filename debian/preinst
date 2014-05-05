@@ -19,4 +19,33 @@ echo "Please accept the license agreement displayed on your N900's screen."
 maemo-confirm-text "Maemo 5 Community SSU Agreement" $LICENSE
 res=$?
 rm -f $LICENSE
+
+#Check if we run under kernel which workarounds errata 430973
+KERNEL_VERSION=`uname -r`
+KERNEL_ERRATA_430973=1
+
+case $KERNEL_VERSION in
+  2.6.28*)
+    if [ ! -f "/sys/kernel/errata_430973" ]; then
+      KERNEL_ERRATA_430973=0
+    fi
+  ;;
+  *)
+  ;;
+esac
+
+if [ "$KERNEL_ERRATA_430973" = "0" ]; then
+cat > $LICENSE << EOF
+The currently running kernel does not have Cortex A8 errata 430973
+workaround, which is needed for thumb2 binaries to function properly.
+
+A custom kernel will be flashed and the system will be automatically
+rebooted from within the enabler.
+EOF
+echo "Please confirm the kernel replacement on your N900's screen."
+maemo-confirm-text "Maemo 5 Community SSU kernel requirements" $LICENSE
+res=$?
+rm -f $LICENSE
+fi
+
 exit $res

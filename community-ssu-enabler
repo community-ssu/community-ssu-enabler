@@ -91,14 +91,46 @@ dpkg -i --force-all $debfile
 echo -e "\nUpdating repository lists..."
 apt-get update
 
+# Check if we have to install a kernel which workarounds errata 430973
+# Assume upstream kernels support it
+KERNEL_VERSION=`uname -r`
+KERNEL_ERRATA_430973=1
+
+case $KERNEL_VERSION in
+	2.6.28*)
+		if [ ! -f "/sys/kernel/errata_430973" ]
+			then
+				KERNEL_ERRATA_430973=0
+		fi
+	;;
+	*)
+	;;
+esac
+
 if [ "$?" = "0" ]
 	then
 		echo "backing up transistions.ini"
 		mv /usr/share/hildon-desktop/transitions.ini /usr/share/hildon-desktop/transitions.ini.precssu
-		echo "Community SSU successfully enabled. Launching Application Manager..."
-		run-standalone.sh dbus-send --print-reply --type=method_call --dest=com.nokia.hildon_application_manager /com/nokia/hildon_application_manager com.nokia.hildon_application_manager.show_check_for_updates_view
-		cleanup
-		exit 0
+		if [ "$KERNEL_ERRATA_430973" = "0" ]
+			then
+				apt-get -y --force-yes install kernel-cssu kernel-cssu-modules kernel-cssu-flasher
+				if [ "$?" = "0" ]
+					then
+						cleanup
+						echo "Rebooting..."
+						run-standalone.sh reboot
+						while [ 1 ]; do sleep 1; done
+				else
+						echo "Community SSU enabled, but CSSU kernel installation failed."
+						echo "Press any key to exit..."
+						read keypress
+				fi
+		else
+				echo "Community SSU successfully enabled. Launching Application Manager..."
+				run-standalone.sh dbus-send --print-reply --type=method_call --dest=com.nokia.hildon_application_manager /com/nokia/hildon_application_manager com.nokia.hildon_application_manager.show_check_for_updates_view
+				cleanup
+				exit 0
+		fi
 	else
 		echo "Community SSU enabled, but package was not installed. Errors have occured."
 		echo "Press any key to exit..."
