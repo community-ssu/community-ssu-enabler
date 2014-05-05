@@ -1,3 +1,10 @@
+community-ssu-enabler (0.7-4+thumb0) fremantle; urgency=low
+
+  * Flash kernel-cssu if the currently running kernel does not workaround
+    errata 430973
+
+ -- Ivaylo Dimitrov <freemangordon@abv.bg>  Tue, 05 May 2014 16:00:12 +0300
+
 community-ssu-enabler (0.7-4) fremantle; urgency=low
 
   * Updated cssu gpg key, would have expired 2013-10-25
