@@ -25,7 +25,7 @@ then
 
 cleanup
 echo "Community SSU already enabled"
-echo "Press any key to exit..."
+echo "Press ENTER to exit..."
 read keypress
 exit 0
 
@@ -122,7 +122,7 @@ if [ "$?" = "0" ]
 		exit 0
 	else
 		echo "Community SSU enabled, but package was not installed. Errors have occured."
-		echo "Press any key to exit..."
+		echo "Press ENTER to exit..."
 		read keypress
 fi
 
