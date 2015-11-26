@@ -114,6 +114,27 @@ hildon-application-manager-config -v add - << EOF
 EOF
 fi
 
+#disable nokia repos to prevent apt-get update fails
+hildon-application-manager-config -v add - << EOF
+<config> 
+ <catalogue>
+  <file>variant-catalogues</file>
+  <id>nokia-certified</id>
+  <disabled />
+ </catalogue>
+ <catalogue>
+  <file>variant-catalogues</file>
+  <id>nokia-system</id>
+  <disabled />
+ </catalogue>
+ <catalogue>
+  <file>variant-catalogues</file>
+  <id>ovi</id>
+  <disabled />
+ </catalogue>
+</config>
+EOF
+
 for file in /usr/share/hildon-application-manager/keys/*.gpg; do
 	apt-key add $file
 done
