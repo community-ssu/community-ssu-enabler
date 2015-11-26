@@ -1,3 +1,9 @@
+community-ssu-enabler (0.7-5) fremantle; urgency=low
+
+  * Since nokia repos are no more, disable them on installation
+
+ -- Christian Ratzenhofer <christian.ratzenhofer@cdnm.at>  Thu, 26 Nov 2015 15:43:15 +0100
+
 community-ssu-enabler (0.7-4) fremantle; urgency=low
 
   * Updated cssu gpg key, would have expired 2013-10-25
