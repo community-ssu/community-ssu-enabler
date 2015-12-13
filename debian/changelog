@@ -1,3 +1,9 @@
+community-ssu-enabler (0.7-5+thumb0) fremantle; urgency=low
+
+  * merge master branch
+
+ -- Ivaylo Dimitrov <freemangordon@abv.bg>  Sun, 13 Dec 2015 15:35:33 +0200
+
 community-ssu-enabler (0.7-5) fremantle; urgency=low
 
   * Since nokia repos are no more, disable them on installation
