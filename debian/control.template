@@ -1,18 +1,24 @@
 Source: community-ssu-enabler
 Section: user/system
 Priority: optional
-Maintainer: Mohammad Abu-Garbeyyeh <mohammad7410@gmail.com>
+Maintainer: Pali Rohár <pali.rohar@gmail.com>
 Build-Depends: debhelper
 
 Package: community-ssu-enabler
+Section: utils
 Architecture: all
 Depends: hildon-application-manager, osso-gnupg | gnupg, apt, sudo, osso-xterm
-Description: Configures the Maemo 5 Community SSU repo.
-XSBC-Maemo-Display-Name: Community SSU enabler
-XSBC-Maemo-Upgrade-Description: Install this to receive community software updates.
+Description: Scripts, GPG keys and Zone files for Community SSU catalogues
+
+Package: community-ssu-enabler-@template@
+Architecture: all
+Depends: community-ssu-enabler (>= ${binary:Version})
+Description: This will install Maemo 5 Community SSU (@template@) update
  NOTE: These are unofficial software updates provided by the
  maemo.org community with no warranty expressed or implied and
  are not supported by Nokia.
+XSBC-Maemo-Display-Name: Community SSU (@template@) enabler
+XSBC-Maemo-Upgrade-Description: This will update catalogue configuration
 XB-Maemo-Icon-26:
  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c
  6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0

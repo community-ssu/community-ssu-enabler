@@ -1,0 +1,12 @@
+<config>
+  <catalogue>
+    <id>community-testing</id>
+    <name>
+     <default>Community SSU (testing)</default>
+    </name>
+    <uri>http://repository.maemo.org/community-testing/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <sort-weight>79</sort-weight>
+  </catalogue>
+</config>

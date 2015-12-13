@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" != "remove" ]; then exit 0; fi
+
+dbusmsg="run-standalone.sh dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.SystemNoteInfoprint"
+
+community-ssu-disabler --check @template@
+
+if test -s /var/tmp/remove-packages || test -s /var/tmp/install-packages; then
+	echo
+	echo "ERROR: Package community-ssu-enabler-@template@ cannot be uninstalled, because Community SSU (@template@) is installed"
+	echo "First uninstall Community SSU via: sudo community-ssu-disabler"
+	echo
+	$dbusmsg string:"ERROR: Package community-ssu-enabler-@template@ cannot be uninstalled, because Community SSU (@template@) is installed"
+	$dbusmsg string:"First uninstall Community SSU via: sudo community-ssu-disabler"
+	exit 1
+fi
+
+exit 0

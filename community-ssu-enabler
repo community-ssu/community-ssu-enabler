@@ -25,11 +25,32 @@ then
 
 cleanup
 echo "Community SSU already enabled"
-echo "Press any key to exit..."
+echo "Press ENTER to exit..."
 read keypress
 exit 0
 
 else
+
+proxy_mode="$(gconftool -g /system/proxy/mode)"
+
+if [ "$proxy_mode" = "manual" ]; then
+
+	use_http_proxy="$(gconftool -g /system/http_proxy/use_http_proxy)"
+	if [ "$use_http_proxy" = "true" ]; then
+		host="$(gconftool -g /system/http_proxy/host)"
+		port="$(gconftool -g /system/http_proxy/port)"
+		if [ -n "$host" ] && [ -n "$port" ]; then
+			export http_proxy="http://$host:$port"
+		fi
+	fi
+
+	host="$(gconftool -g /system/proxy/secure_host)"
+	port="$(gconftool -g /system/proxy/secure_port)"
+	if [ -n "$host" ] && [ -n "$port" ]; then
+		export https_proxy="https://$host:$port"
+	fi
+
+fi
 
 if ps ax | grep -v grep | grep apt-worker > /dev/null
 	then
@@ -87,12 +108,20 @@ fi
 
 echo -e "\nInstalling community package $communitymp dumb meta package..."
 dpkg -i --force-all $debfile
+meta_installed="$?"
 
 echo -e "\nUpdating repository lists..."
 apt-get update
+apt_finished="$?"
 
-if [ "$?" = "0" ]
+if [ "$meta_installed" = "0" ]
 	then
+		if [ "$apt_finished" != "0" ]
+			then
+				echo "apt-get update failed, but this is not fatal."
+				echo "Press ENTER to continue..."
+				read keypress
+		fi
 		echo "backing up transistions.ini"
 		mv /usr/share/hildon-desktop/transitions.ini /usr/share/hildon-desktop/transitions.ini.precssu
 		echo "Community SSU successfully enabled. Launching Application Manager..."
@@ -101,7 +130,7 @@ if [ "$?" = "0" ]
 		exit 0
 	else
 		echo "Community SSU enabled, but package was not installed. Errors have occured."
-		echo "Press any key to exit..."
+		echo "Press ENTER to exit..."
 		read keypress
 fi
 

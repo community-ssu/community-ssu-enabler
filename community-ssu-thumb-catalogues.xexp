@@ -1,0 +1,12 @@
+<config>
+  <catalogue>
+    <id>community-thumb</id>
+    <name>
+     <default>Community SSU (thumb)</default>
+    </name>
+    <uri>http://maemo.merlin1991.at/cssu/community-thumb/</uri>
+    <dist>fremantle</dist>
+    <components>free non-free</components>
+    <sort-weight>77</sort-weight>
+  </catalogue>
+</config>

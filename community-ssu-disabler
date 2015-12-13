@@ -9,11 +9,27 @@ BEGIN		{ FS = ": " }
 ' "$@"
 }
 
-CSSU_LISTS="/var/lib/apt/lists/repository.maemo.org_community_*_Packages /var/lib/apt/lists/repository.maemo.org_community-testing_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-devel_*_Packages /var/lib/apt/lists/maemo.merlin1991.at_cssu_community-thumb_*_Packages"
+CSSU_STABLE="/var/lib/apt/lists/repository.maemo.org_community_*_Packages"
+CSSU_TESTING="/var/lib/apt/lists/repository.maemo.org_community-testing_*_Packages"
+CSSU_DEVEL="/var/lib/apt/lists/maemo.merlin1991.at_cssu_community-devel_*_Packages"
+CSSU_THUMB="/var/lib/apt/lists/maemo.merlin1991.at_cssu_community-thumb_*_Packages"
+
+CSSU_LISTS="$CSSU_STABLE $CSSU_TESTING $CSSU_DEVEL $CSSU_THUMB"
 
 if test "$(id -u)" != "0"; then
 	echo "You must be root to run this script"
 	exit 1
+fi
+
+if test "$1" = "--check"; then
+	case "$2" in
+		stable) CSSU_LISTS="$CSSU_STABLE" ;;
+		testing) CSSU_LISTS="$CSSU_TESTING" ;;
+		devel) CSSU_LISTS="$CSSU_DEVEL" ;;
+		thumb) CSSU_LISTS="$CSSU_THUMB" ;;
+		"") ;;
+		*) echo "Unknown CSSU type $2"; exit 1 ;;
+	esac
 fi
 
 echo "Checking system packages. Please wait... (this can take a lot of time)"
@@ -24,9 +40,9 @@ touch /var/tmp/cssu-packages
 rm -f /var/tmp/cssu-lists
 touch /var/tmp/cssu-lists
 for file in $CSSU_LISTS; do
-	if ! test -f $file; then continue; fi
-	echo $file >> /var/tmp/cssu-lists
-	sed -n 's/Package: //p' $file >> /var/tmp/cssu-packages
+	if ! test -f "$file"; then continue; fi
+	echo "$file" >> /var/tmp/cssu-lists
+	sed -n 's/Package: //p' "$file" >> /var/tmp/cssu-packages
 done
 sort -u /var/tmp/cssu-packages > /var/tmp/cssu-packages.new
 mv /var/tmp/cssu-packages.new /var/tmp/cssu-packages
@@ -37,7 +53,7 @@ grep -v '^community-ssu-enabler$' /var/tmp/cssu-packages.new > /var/tmp/cssu-pac
 rm -f /var/tmp/version-packages
 touch /var/tmp/version-packages
 for file in /var/lib/apt/lists/*_Packages; do
-	if ! test -f $file; then continue; fi
+	if ! test -f "$file"; then continue; fi
 	if grep -q "^$file\$" /var/tmp/cssu-lists; then continue; fi
 	packages $file >> /var/tmp/version-packages
 done
@@ -51,14 +67,14 @@ touch /var/tmp/remove-packages
 while read package; do
 	max=0
 	for version in $(grep "^$package " /var/tmp/version-packages | sed 's/.* //'); do
-		if dpkg --compare-versions $max lt $version 1>/dev/null 2>&1; then
-			max=$version
+		if dpkg --compare-versions "$max" "<<" "$version" 1>/dev/null 2>&1; then
+			max="$version"
 		fi
 	done
 	if test "$max" = "0"; then
 		echo "$package" >> /var/tmp/remove-packages
 	else
-		if test $(dpkg-query -W -f \${Version} $package) != "$max"; then
+		if test "$(dpkg-query -W -f \${Version} $package)" != "$max"; then
 			echo "$package=$max" >> /var/tmp/install-packages
 		fi
 	fi
@@ -69,7 +85,7 @@ rm -f /var/tmp/cssu-packages /var/tmp/cssu-lists /var/tmp/version-packages
 meta=mp-fremantle-generic-pr
 for num in 002 003 004 203 204 205 206 207 208 210; do
 	if dpkg -l "*-$num" 2>/dev/null | grep -q '^ii'; then
-		meta=mp-fremantle-$num-pr
+		meta="mp-fremantle-$num-pr"
 		break
 	fi
 done
@@ -89,13 +105,13 @@ fi
 echo
 
 echo "Install metapackage:"
-if ! dpkg -l $meta 2>/dev/null | grep -q '^ii'; then
-	echo $meta >> /var/tmp/install-packages
-	echo $meta
+if ! dpkg -l "$meta" 2>/dev/null | grep -q '^ii'; then
+	echo "$meta" >> /var/tmp/install-packages
+	echo "$meta"
 fi
 echo
 
-if test "$1" == "--check"; then exit 0; fi
+if test "$1" = "--check"; then exit 0; fi
 
 echo "This script will uninstall Community SSU and downgrade Maemo 5 to last Nokia version."
 echo "See above changes, do you want to continue? (yes/no)"
@@ -105,6 +121,27 @@ read REPLY
 if test "$REPLY" != "yes"; then
 	echo "Canceling..."
 	exit 0
+fi
+
+proxy_mode="$(gconftool -g /system/proxy/mode)"
+
+if test "$proxy_mode" = "manual"; then
+
+	use_http_proxy="$(gconftool -g /system/http_proxy/use_http_proxy)"
+	if test "$use_http_proxy" = "true"; then
+		host="$(gconftool -g /system/http_proxy/host)"
+		port="$(gconftool -g /system/http_proxy/port)"
+		if test -n "$host" -a -n "$port"; then
+			export http_proxy="http://$host:$port"
+		fi
+	fi
+
+	host="$(gconftool -g /system/proxy/secure_host)"
+	port="$(gconftool -g /system/proxy/secure_port)"
+	if test -n "$host" -a -n "$port"; then
+		export https_proxy="https://$host:$port"
+	fi
+
 fi
 
 echo

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+if [ -f /var/lib/dpkg/info/mp-fremantle-community-pr.list ]; then
+	rm -f /usr/share/applications/hildon/community-ssu-enabler.desktop
+	rm -rf /opt/ssu
+fi
+
+for file in /usr/share/hildon-application-manager/keys/*.gpg; do
+	apt-key add $file
+done
+
+update-sudoers
+
+# Remove old diversion of apt-worker
+APTWORKER=/usr/libexec/apt-worker
+if [ -L "${APTWORKER}" ]; then
+	rm -f "${APTWORKER}"
+fi
+if dpkg-divert --list | grep "${APTWORKER}"; then
+	dpkg-divert --rename --remove "${APTWORKER}"
+fi
+
+exit 0
